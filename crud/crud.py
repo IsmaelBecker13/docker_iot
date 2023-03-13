@@ -67,13 +67,7 @@ def actualizar_contacto(id):
         tel = request.form['tel']
         email = request.form['email']
         cur = mysql.connection.cursor()
-        cur.execute("""
-            UPDATE contactos
-            SET nombre = %s,
-                tel = %s,
-                email = %s
-            WHERE id = %s
-        """, (nombre, tel, email, id))
+        cur.execute("UPDATE contactos SET nombre = %s, tel = %s, email = %s WHERE id = %s", (nombre, tel, email, id))
     if mysql.connection.affected_rows():
         flash('Se actualizó un contacto')  # usa sesión
         logging.info("se actualizó un contacto")
