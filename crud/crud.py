@@ -37,7 +37,7 @@ def add_contact():
         cur.execute("INSERT INTO contactos (nombre, tel, email) VALUES (%s,%s,%s)"
                     , (nombre, tel, email))
         mysql.connection.commit()
-        return redirect(url_for('index'))
+    return redirect(url_for('index'))
 
 @app.route('/borrar/<string:id>', methods = ['GET'])
 def borrar_contacto(id):
@@ -45,5 +45,5 @@ def borrar_contacto(id):
     cur.execute('DELETE FROM contactos WHERE id = {0}'.format(id))
     if mysql.connection.affected_rows():
         flash('Se eliminó un contacto')  # usa sesión
-    mysql.connection.commit()
+        mysql.connection.commit()
     return redirect(url_for('index'))
