@@ -30,4 +30,4 @@ def add_contact():
         cur.execute("INSERT INTO contactos (nombre, tel, email) VALUES (%s,%s,%s)"
                     , (nombre, tel, email))
         mysql.connection.commit()
-        return redirect(url_for('index'))
+    return redirect(url_for('index'))
