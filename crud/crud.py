@@ -40,7 +40,7 @@ def add_contact():
             flash('Se agregó un contacto')  # usa sesión
             logging.info("se agregó un contacto")
         mysql.connection.commit()
-        return redirect(url_for('index'))
+    return redirect(url_for('index'))
 
 @app.route('/borrar/<string:id>', methods = ['GET'])
 def borrar_contacto(id):
@@ -68,8 +68,8 @@ def actualizar_contacto(id):
         email = request.form['email']
         cur = mysql.connection.cursor()
         cur.execute("UPDATE contactos SET nombre = %s, tel = %s, email = %s WHERE id = %s", (nombre, tel, email, id))
-    if mysql.connection.affected_rows():
-        flash('Se actualizó un contacto')  # usa sesión
-        logging.info("se actualizó un contacto")
-        mysql.connection.commit()
-        return redirect(url_for('index'))
+        if mysql.connection.affected_rows():
+            flash('Se actualizó un contacto')  # usa sesión
+            logging.info("se actualizó un contacto")
+            mysql.connection.commit()
+    return redirect(url_for('index'))
