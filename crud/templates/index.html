@@ -3,8 +3,8 @@
 
 <form action="{{url_for('add_contact')}}" method="POST">
   <input type="text" name="nombre" placeholder="Nombre completo">
-  <input type="tel" name="tel" placeholder="teléfono">
   <input type="email" name="email" placeholder="Email">
+  <input type="tel" name="tel" placeholder="teléfono">
   <button>guardar</button>
 </form>
 
@@ -13,9 +13,9 @@
     <tr>
       <td>ID</td>
       <td>Nombre completo</td>
-      <td>teléfono</td>
       <td>Email</td>
-     <td>acción</td>
+      <td>teléfono</td>
+      <td>acción</td>
     </tr>
   </thead>
   <tbody>
