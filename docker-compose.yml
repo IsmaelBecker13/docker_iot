@@ -143,14 +143,6 @@ services:
     restart: unless-stopped
     depends_on:
       - mariadb
-  cheques:
-    image: cheques
-    build:
-      context: ./cheques
-    container_name: cheques
-    volumes:
-      - ~/docker/cheques/app:/app/tmp
-    restart: unless-stopped
   wireguard:
     image: lscr.io/linuxserver/wireguard:latest
     container_name: wireguard
@@ -175,6 +167,20 @@ services:
       - 10000:51820/udp
     sysctls:
       - net.ipv4.conf.all.src_valid_mark=1
+    restart: unless-stopped
+  node-red:
+    image: nodered/node-red:latest
+    container_name: node-red
+    ports:
+      - 1880:1880
+    volumes:
+      - ~/docker/node-red:/data
+    restart: unless-stopped
+  influxdb:
+    image: influxdb:latest
+    container_name: influxdb
+    ports:
+      - 8086:8086
     restart: unless-stopped
 volumes:
   portainer_data:
