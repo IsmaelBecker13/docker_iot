@@ -143,14 +143,6 @@ services:
     restart: unless-stopped
     depends_on:
       - mariadb
-  cheques:
-    image: cheques
-    build:
-      context: ./cheques
-    container_name: cheques
-    volumes:
-      - ~/docker/cheques/app:/app/tmp
-    restart: unless-stopped
   wireguard:
     image: lscr.io/linuxserver/wireguard:latest
     container_name: wireguard
