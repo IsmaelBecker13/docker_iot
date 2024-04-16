@@ -7,6 +7,7 @@ async def suscribir(client, topico):
     await client.subscribe(topico)
     async for message in client.messages:
         logging.info(str(message.topic) + ": " + message.payload.decode("utf-8"))
+    await asyncio.sleep(0)
 
 async def publicar(client, topico):
     while True:
@@ -27,6 +28,12 @@ async def main():
         async with asyncio.TaskGroup() as tg:
             tg.create_task(publicar(client, os.environ['TOPICO_PUB']))
             tg.create_task(suscribir(client, os.environ['TOPICO_SUB']))
+        
+            contador = 0
+            while True:
+                logging.info("contador: " + str(contador))
+                contador += 1
+                await asyncio.sleep(3)
         
 if __name__ == "__main__":
     asyncio.run(main())
