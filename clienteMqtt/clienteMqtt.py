@@ -5,22 +5,44 @@ import types
 # https://github.com/python/typeshed/pull/11609
 logging.basicConfig(format='%(asctime)s - task: %(taskName)s - %(levelname)s:%(message)s', level=logging.INFO, datefmt='%d/%m/%Y %H:%M:%S %z')
 
-async def suscribir(client, topico):
-    await client.subscribe(topico)
+
+async def topico1_consumer():
+    while True:
+        message = await topico1_queue.get()
+        logging.info(" " + str(message.topic) + ": " + message.payload.decode("utf-8"))
+
+
+async def topico2_consumer():
+    while True:
+        message = await topico2_queue.get()
+        logging.info(" " + str(message.topic) + ": " + message.payload.decode("utf-8"))
+
+
+topico1_queue = asyncio.Queue()
+topico2_queue = asyncio.Queue()
+
+
+async def distribuidor(client):
     async for message in client.messages:
-        logging.info(str(message.topic) + ": " + message.payload.decode("utf-8"))
+        if message.topic.matches(os.environ['TOPICO_SUB1']):
+            topico1_queue.put_nowait(message)
+        elif message.topic.matches(os.environ['TOPICO_SUB2']):
+            topico2_queue.put_nowait(message)
+
 
 async def publicar(client, topico, contador):
     while True:
-        await asyncio.sleep(5)
+        await asyncio.sleep(10)
         await client.publish(topico, payload=contador.valor)
         logging.info(" publicando: " + str(contador.valor))
+
 
 async def contar(contador):
     while True:
         contador.valor += 1
-        logging.info(" el valor es: " + str(contador.valor))
+        # logging.info(" el valor es: " + str(contador.valor))
         await asyncio.sleep(3)
+
 
 async def main():
     # https://stackoverflow.com/a/41765294
@@ -38,9 +60,13 @@ async def main():
         tls_context = tls_context,
     ) as client:
         # https://sbtinstruments.github.io/aiomqtt/subscribing-to-a-topic.html#multiple-queues
+        await client.subscribe(os.environ['TOPICO_SUB1'])
+        await client.subscribe(os.environ['TOPICO_SUB2'])
         async with asyncio.TaskGroup() as tg:
             tg.create_task(publicar(client, os.environ['TOPICO_PUB'],contador), name='publicador')
-            tg.create_task(suscribir(client, os.environ['TOPICO_SUB']), name='suscriptor')
+            tg.create_task(distribuidor(client), name='distribuidor')
+            tg.create_task(topico1_consumer(), name='suscriptor1')
+            tg.create_task(topico2_consumer(), name='suscriptor2')
             tg.create_task(contar(contador), name='contador')                
         
 if __name__ == "__main__":
