@@ -70,7 +70,7 @@ async def main():
             tg.create_task(contar(contador), name='contador')                
         
 if __name__ == "__main__":
-    # https://stackoverflow.com/questions/70399670/how-to-shutdown-gracefully-on-keyboard-interrupt-when-an-asyncio-task-is-perform
+    # https://stackoverflow.com/questions/70399670
     try:
         asyncio.run(main())
     except KeyboardInterrupt as e:
