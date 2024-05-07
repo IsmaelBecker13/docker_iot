@@ -48,7 +48,7 @@ services:
       - ./mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf
       - ./mosquitto/config:/mosquitto/config
   grafana:
-    image: grafana/grafana
+    image: grafana/grafana-oss
     container_name: grafana
     user: "1000"
     volumes:
@@ -58,5 +58,6 @@ services:
     depends_on:
       - mariadb
     environment:
-      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      - TZ=America/Argentina/Buenos_Aires
+      - GF_ANALYTICS_REPORTING_ENABLED= "false"
     restart: unless-stopped
