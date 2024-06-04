@@ -52,10 +52,10 @@ def borrar_contacto(id):
     mysql.connection.commit()
     return redirect(url_for('index'))
 
-@app.route('/editar/<id>', methods = ['GET'])
+@app.route('/editar/<string:id>', methods = ['GET'])
 def conseguir_contacto(id):
     cur = mysql.connection.cursor()
-    cur.execute('SELECT * FROM contactos WHERE id = %s', (id))
+    cur.execute('SELECT * FROM contactos WHERE id = %s', (id,))
     datos = cur.fetchone()
     logging.info(datos)
     return render_template('editar-contacto.html', contacto = datos)
