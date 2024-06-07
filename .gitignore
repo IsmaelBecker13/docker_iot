@@ -137,8 +137,13 @@ dmypy.json
 #swag related files: ignore all except NGINX conf
 grafana/
 mosquitto/
+wireguard/
+mariadb/
+!swag/
+swag/*
+!swag/nginx/
+swag/nginx/*
+!swag/nginx/proxy-confs/
+swag/nginx/proxy-confs/*
 !swag/nginx/proxy-confs/crud.subfolder.conf
 !swag/nginx/proxy-confs/fastapi.subfolder.conf
-wireguard/
-opengist/
-swag/
