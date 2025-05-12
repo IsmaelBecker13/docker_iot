@@ -75,6 +75,7 @@ async def graficos(update: Update, context):
         buffer = BytesIO()
         fig.tight_layout()
         fig.savefig(buffer, format='png')
+        plt.close()
         buffer.seek(0)
         await context.bot.send_photo(chat_id=update.effective_chat.id, photo=buffer)
         buffer.close()
