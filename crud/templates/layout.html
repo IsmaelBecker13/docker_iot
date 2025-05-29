@@ -3,29 +3,34 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>FLASK CRUD 1.6</title>
-  <!-- <link rel="stylesheet" href="https://bootswatch.com/5/cosmo/bootstrap.min.css"> -->
-  <link rel="stylesheet" href="https://bootswatch.com/5/darkly/bootstrap.min.css">
-  {% with messages = get_flashed_messages() %} {% if messages %}
-  {% for message in messages %}
-  <div class="alert alert-success alert-dismissible fade show" role="alert">
-    <strong>{{ message }}
+  <title>Becker Ismael - Ejercicio Flask 1</title>
+
+  <link id="theme-link" rel="stylesheet" href="">
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <strong>{{ message }}</strong>
       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-  </div>
-  {% endfor %}
-  {% endif %} {% endwith %}
+    </div>
+    {% endfor %}
+  {% endif %}
+  {% endwith %}
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">CRUD</a>
       {% if session.get("user_id") %}
-      <div class="d-flex">
-        <div class="nav-item pe-3 pt-2">{{ session.get("user_id") }}</div>
-        <a href="{{url_for('logout')}}" class="btn btn-secondary my-2 my-sm-0" type="submit">Salir</a>
+      <div class="d-flex align-items-center">
+        <div class="nav-item pe-3">{{ session.get("user_id") }}</div>
+        <select class="form-select me-3" id="theme-selector" style="width: auto;">
+          <option value="cosmo">Clear</option>
+          <option value="darkly">Dark</option>
+        </select>
+        <a href="{{ url_for('logout') }}" class="btn btn-secondary" onclick="localStorage.removeItem('selectedTheme')">Salir</a>
       </div>
       {% endif %}
     </div>
   </nav>
-
 </head>
 
 <body>
@@ -33,8 +38,31 @@
     {% block body %}
     {% endblock %}
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" 
-          integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" 
+
+  <script>
+    const themeLink = document.getElementById('theme-link');
+    const themeSelector = document.getElementById('theme-selector');
+
+    const themes = {
+      cosmo: "https://bootswatch.com/5/cosmo/bootstrap.min.css",
+      darkly: "https://bootswatch.com/5/darkly/bootstrap.min.css"
+    };
+
+    const defaultTheme = 'cosmo';
+    const savedTheme = localStorage.getItem('selectedTheme') || defaultTheme;
+
+    themeLink.href = themes[savedTheme];
+    themeSelector.value = savedTheme;
+
+    themeSelector.addEventListener('change', function () {
+      const selected = this.value;
+      themeLink.href = themes[selected];
+      localStorage.setItem('selectedTheme', selected);
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
           crossorigin="anonymous"></script>
 
   <script src="{{url_for('static', filename='js/main.js')}}"></script>
