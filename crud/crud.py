@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 from flask_mysqldb import MySQL
 import os, logging
 from functools import wraps
@@ -145,3 +145,13 @@ def logout():
     session.clear()
     logging.info("el usuario {} cerró su sesión".format(session.get("user_id")))
     return redirect(url_for('index'))
+
+@app.route('/api', methods = ['GET'])
+def ReturnJSON():
+    diccio = {
+    "marca": "Ford",
+    "modelo": "Mustang",
+    "año": 1964
+    }
+    # return jsonify(diccio)
+    return diccio
